@@ -26,20 +26,20 @@ def placeShips(opponentID):
 	grid = [[-1 for x in range(8)] for x in range(8)] # Fill Grid With -1s
 
 	# Place Ships
-	i = 0#random.randint(0, 5)
-	print i
+	#i = 0#random.randint(0, 5)
+	#print i
 
-	if i == 0:
+	'''if i == 0:
 		placeDestroyer("A0","A1") # Ship Length = 2
 		placeSubmarine("B0","B2") # Ship Length = 3
 		placeCruiser("C0","C2") # Ship Length = 3
 		placeBattleship("D0","D3") # Ship Length = 4
 		placeCarrier("E0","E4") # Ship Length = 5
-		'''placeDestroyer("A0","B0") # Ship Length = 2
+		placeDestroyer("A0","B0") # Ship Length = 2
 		placeSubmarine("G3","G5") # Ship Length = 3
 		placeCruiser("C0","C2") # Ship Length = 3
 		placeBattleship("E7","H7") # Ship Length = 4
-		placeCarrier("H0","H4") # Ship Length = 5'''
+		placeCarrier("H0","H4") # Ship Length = 5
 
 	elif i == 1:
 		placeDestroyer("G1","G2") # Ship Length = 2
@@ -74,7 +74,13 @@ def placeShips(opponentID):
 		placeSubmarine("B7","D7") # Ship Length = 3
 		placeCruiser("C1","C3") # Ship Length = 3
 		placeBattleship("F0","F3") # Ship Length = 4
-		placeCarrier("H3","H7") # Ship Length = 5
+		placeCarrier("H3","H7") # Ship Length = 5'''
+
+	placeDestroyer("A0","A1") # Ship Length = 2
+	placeSubmarine("B0","B2") # Ship Length = 3
+	placeCruiser("C0","C2") # Ship Length = 3
+	placeBattleship("D0","D3") # Ship Length = 4
+	placeCarrier("E0","E4") # Ship Length = 5
 
 class Node():
 	def __init__(self, x, y):
@@ -98,13 +104,14 @@ class Stack():
 	def push(self, node):
 		if self.total == 0:
 			self.head = node
+			self.total += 1
 			return
 		node.next = self.head
 		self.head = node
 		self.total += 1
 
 	def pop(self):
-		if self.total == 1:
+		if self.total == 0:
 			print "cannot remove from empty stack"
 			return
 
@@ -114,15 +121,19 @@ class Stack():
 		self.total -= 1
 		return toRet
 
-def makeMove():
-	global grid
-
-	prob = [None] * 8
+prob = [None] * 8
 	for i in range(len(prob)):
 	    prob[i] = [None] * 8
 	    for j in range(len(prob[i])):
 	        s = Node(i, j)
 	        prob[i][j] = s
+
+s = Stack()
+
+def makeMove():
+	global grid
+    global prob
+	global s
 
 	"""for x in range(7, -1, -1): # Loop Till Find Square that has not been hit
 		for y in range(7,-1, -1):
@@ -138,31 +149,57 @@ def makeMove():
 					grid[x][y] = 0"""
 
 	move = 0
-	while move < 64:
-		randx = random.randint(0, 7)
-		randy = random.randint(0, 7)
 
-		while prob[randx][randy].visited != 0:
+	s = Stack()
+
+	'''for x in range(0,8): # Loop Till Find Square that has not been hit
+		for y in range(0,8):
+			if grid[x][y] == -1:
+				wasHitSunkOrMiss = placeMove(letters[x]+str(y)) # placeMove(LetterNumber) - Example: placeMove(D5)
+				if(wasHitSunkOrMiss == "Hit" or wasHitSunkOrMiss == "Sunk"):
+					grid[x][y] = 1
+				else:
+					grid[x][y] = 0
+
+				return'''
+
+	while move < 64:
+		print move
+		randx = 0#random.randint(0, 7)
+		randy = move % 8#random.randint(0, 7)
+
+		print randx, randy
+
+		'''while prob[randx][randy].visited != 0:
 			randx = random.randint(0, 7)
 			randy = random.randint(0, 7)
+			print randx, randy'''
 
 		x = randx
 		y = randy
 
+		print x, y
+
 		wasHitSunkOrMiss = placeMove(letters[x]+str(y))
+		move += 1
 
 		prob[x][y].visited = 1;
 
 		if(wasHitSunkOrMiss == "Hit" or wasHitSunkOrMiss == "Sunk"):
-					grid[x][y] = 1
-					prob[x][y].hit = 1
+			print "hit"
+			grid[x][y] = 1
+			print prob[x][y].hit
+			prob[x][y].hit = 1
 
-					top = Node(x, y + 1)
+		else:
+			print "print no hit"
+			grid[x][y] = 0
+
+		'''top = Node(x, y + 1)
 					dow = Node(x, y - 1)
 					lef = Node(x - 1, y)
 					rig = Node(x + 1, y)
 
-					s = Stack()
 					if top.checkOver() == False:
 						s.push(top)
 					if dow.checkOver() == False:
@@ -173,15 +210,18 @@ def makeMove():
 						s.push(rig)
 
 					while s.total != 0:
+						print "tjis is dick"
 						curr = s.pop()
-						if curr.visted != 0:
-							move += 1
+						if curr.visited != 0:
+							print "second if"
 							nX = curr.x
 							nY = curr.y
 							wasHitSunkOrMiss = placeMove(letters[nX]+str(nY))
 							prob[nX][nY].visited = 1;
+							move += 1
 
 							if(wasHitSunkOrMiss == "Hit" or wasHitSunkOrMiss == "Sunk"):
+								print "hit2"
 								grid[nX][nY] = 1
 								prob[nX][nY].hit = 1
 								topN = Node(nX, nY + 1)
@@ -197,11 +237,9 @@ def makeMove():
 								if rigN.checkOver() == False:
 									s.push(rigN)
 							else:
-								grid[nX][nY] = 0
-		else:
-			grid[x][y] = 0
-		move += 1
-
+								print "no hit 2"
+								grid[nX][nY] = 0'''
+	
 	return
 
 ############################## ^^^^^ PUT YOUR CODE ABOVE HERE ^^^^^ ##############################
