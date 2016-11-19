@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Nov 18 19:53:32 2016
+
+@author: Rahul Patni
+"""
+
 '''
 	@ AUTHOR NAME HERE
 	@ Starter Code By Harris Christiansen (Harris@purduecs.com)
@@ -26,20 +33,13 @@ def placeShips(opponentID):
 	grid = [[-1 for x in range(8)] for x in range(8)] # Fill Grid With -1s
 
 	# Place Ships
-	i = 0#random.randint(0, 5)
-	print i
-
+	i = random.randint(0, 5)
 	if i == 0:
-		placeDestroyer("A0","A1") # Ship Length = 2
-		placeSubmarine("B0","B2") # Ship Length = 3
-		placeCruiser("C0","C2") # Ship Length = 3
-		placeBattleship("D0","D3") # Ship Length = 4
-		placeCarrier("E0","E4") # Ship Length = 5
-		'''placeDestroyer("A0","B0") # Ship Length = 2
+		placeDestroyer("A0","B0") # Ship Length = 2
 		placeSubmarine("G3","G5") # Ship Length = 3
 		placeCruiser("C0","C2") # Ship Length = 3
 		placeBattleship("E7","H7") # Ship Length = 4
-		placeCarrier("H0","H4") # Ship Length = 5'''
+		placeCarrier("H0","H4") # Ship Length = 5
 
 	elif i == 1:
 		placeDestroyer("G1","G2") # Ship Length = 2
@@ -70,11 +70,13 @@ def placeShips(opponentID):
 		placeCarrier("H2","H6") # Ship LengF0th = 5
 
 	else:
-		placeDestroyer("D4","E4") # Ship Length = 2
-		placeSubmarine("B7","D7") # Ship Length = 3
-		placeCruiser("C1","C3") # Ship Length = 3
-		placeBattleship("F0","F3") # Ship Length = 4
-		placeCarrier("H3","H7") # Ship Length = 5
+		placeDestroyer("A0","B0") # Ship Length = 2
+		placeSubmarine("G3","G5") # Ship Length = 3
+		placeCruiser("C0","C2") # Ship Length = 3
+		placeBattleship("E7","H7") # Ship Length = 4
+		placeCarrier("H0","H4") # Ship Length = 5
+
+	print i
 
 class Node():
 	def __init__(self, x, y):
@@ -86,7 +88,7 @@ class Node():
 		self.next = None
 
 	def checkOver(self):
-		if self.x >= 8 or self.y < 0 or self.x < 0 or self.y >= 8:
+		if self.x >= 8 or self.y < 0:
 			return True
 		return False
 
@@ -142,7 +144,7 @@ def makeMove():
 		randx = random.randint(0, 7)
 		randy = random.randint(0, 7)
 
-		while prob[randx][randy].visited != 0:
+		while prob[randx][randy].visted != 0:
 			randx = random.randint(0, 7)
 			randy = random.randint(0, 7)
 
@@ -163,14 +165,10 @@ def makeMove():
 					rig = Node(x + 1, y)
 
 					s = Stack()
-					if top.checkOver() == False:
-						s.push(top)
-					if dow.checkOver() == False:
-						s.push(dow)
-					if lef.checkOver() == False:
-						s.push(lef)
-					if rig.checkOver() == False:
-						s.push(rig)
+					s.push(top)
+					s.push(dow)
+					s.push(lef)
+					s.push(rig)
 
 					while s.total != 0:
 						curr = s.pop()
@@ -183,23 +181,17 @@ def makeMove():
 
 							if(wasHitSunkOrMiss == "Hit" or wasHitSunkOrMiss == "Sunk"):
 								grid[nX][nY] = 1
-								prob[nX][nY].hit = 1
+								prob[[nX][nY].hit = 1
 								topN = Node(nX, nY + 1)
 								dowN = Node(nX, nY - 1)
 								lefN = Node(nX - 1, nY)
 								rigN = Node(nX + 1, nY)
-								if topN.checkOver() == False:
-									s.push(topN)
-								if dowN.checkOver() == False:
-									s.push(dowN)
-								if lefN.checkOver() == False:
-									s.push(lefN)
-								if rigN.checkOver() == False:
-									s.push(rigN)
-							else:
-								grid[nX][nY] = 0
-		else:
-			grid[x][y] = 0
+								s.push(topN)
+								s.push(dowN)
+								s.push(lefN)
+								s.push(rigN)
+				else:
+					grid[x][y] = 0
 		move += 1
 
 	return

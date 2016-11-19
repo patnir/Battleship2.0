@@ -18,7 +18,7 @@ class Node():
 
 class HeapMax():
     def __init__(self):
-        self.array = [None] * 15
+        self.array = [None] * 64
         self.start = 0
         self.end = 0
         
@@ -96,7 +96,7 @@ class HeapMax():
 
 def main():
     h = HeapMax()
-    for i in range(10):
+    for i in range(30):
         n = Node()
         n.val = random.randint(10, 90)
         print n.val
